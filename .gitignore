@@ -1,1 +1,4 @@
 .env
+
+# Claude settings
+*.local.json
