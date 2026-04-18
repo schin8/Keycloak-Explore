@@ -6,11 +6,11 @@ A local Keycloak identity and access management setup using Docker.
 
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
-- [pnpm](https://pnpm.io/installation) (for the sample app)
+- [pnpm](https://pnpm.io/installation) (optional, for `sample-app/`)
 
 ## Getting Started
 
-1. Copy the example environment file and update the passwords:
+1. Create a local `.env` file and set the required passwords. You can copy `.env.example` manually if needed.
 
 ```bash
 cp .env.example .env
@@ -19,11 +19,28 @@ cp .env.example .env
 2. Start the services:
 
 ```bash
-docker compose up
+make up
 ```
 
 - **Admin Console:** http://localhost:8080/admin
 - **Login:** credentials from your `.env` file
+
+## Make Targets
+
+Use `make help` to see the available shortcuts:
+
+```bash
+make help
+```
+
+| Target | Description |
+|--------|-------------|
+| `make up` | Start Keycloak and PostgreSQL in the background |
+| `make down` | Stop services and keep persisted data |
+| `make reset` | Stop services and remove persisted PostgreSQL data |
+| `make restart` | Restart all services |
+| `make logs` | Tail logs for all services |
+| `make ps` | Show service status |
 
 ## Services
 
@@ -94,42 +111,25 @@ On first startup, Keycloak automatically imports the realm configuration from `r
 
 The import only runs when the realm doesn't already exist in the database. To re-import from scratch, bring everything down with `docker compose down -v` and start again.
 
+With the Makefile, the equivalent reset flow is:
+
+```bash
+make reset
+make up
+```
+
 To customize the initial setup, edit `realm-config/my-app-realm.json` before starting.
 
-## Sample App
+## Sample App with pnpm
 
-A React + TypeScript app (`sample-app/`) that demonstrates the Keycloak login flow using the official `keycloak-js` adapter.
-
-### Setup
+If you want to work with the optional React sample app from the repository root, use pnpm's `-C` flag to run commands in `sample-app/` without changing directories.
 
 ```bash
-cd sample-app
-pnpm install
+pnpm -C sample-app install
+pnpm -C sample-app dev
 ```
 
-### Running
-
-Make sure Keycloak is running first (`docker compose up`), then:
-
-```bash
-pnpm dev
-```
-
-Open http://localhost:3000 and click **Login** to authenticate against Keycloak.
-
-### What it does
-
-- Redirects to the Keycloak login page for the `my-app` realm
-- After login, displays the user's profile (username, email, name, roles)
-- Shows the raw JWT access token
-- Supports logout
-
-### Test credentials
-
-| Username  | Password  | Roles               |
-|-----------|-----------|----------------------|
-| testuser  | testuser  | app-user             |
-| testadmin | testadmin | app-user, app-admin  |
+You can use the same pattern for other commands, for example `pnpm -C sample-app build` or `pnpm -C sample-app lint`.
 
 ## Data Persistence
 
@@ -138,11 +138,11 @@ PostgreSQL data is stored in a named Docker volume (`postgres_data`) and persist
 To stop and **keep** data:
 
 ```bash
-docker compose down
+make down
 ```
 
 To stop and **delete** data:
 
 ```bash
-docker compose down -v
+make reset
 ```
