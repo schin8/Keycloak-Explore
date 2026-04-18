@@ -1,0 +1,60 @@
+{
+  "realm": "my-app",
+  "enabled": true,
+  "registrationAllowed": true,
+  "roles": {
+    "realm": [
+      {
+        "name": "app-user",
+        "description": "Standard application user"
+      },
+      {
+        "name": "app-admin",
+        "description": "Application administrator"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "my-web-app",
+      "enabled": true,
+      "publicClient": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": ["http://localhost:3000/*"],
+      "webOrigins": ["http://localhost:3000"],
+      "defaultClientScopes": ["openid", "profile", "email"]
+    }
+  ],
+  "users": [
+    {
+      "username": "${REALM_TEST_USER}",
+      "enabled": true,
+      "email": "${REALM_TEST_USER}@example.com",
+      "firstName": "Test",
+      "lastName": "User",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${REALM_TEST_USER_PASSWORD}",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["app-user"]
+    },
+    {
+      "username": "${REALM_TEST_ADMIN}",
+      "enabled": true,
+      "email": "${REALM_TEST_ADMIN}@example.com",
+      "firstName": "Test",
+      "lastName": "Admin",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${REALM_TEST_ADMIN_PASSWORD}",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["app-user", "app-admin"]
+    }
+  ]
+}
