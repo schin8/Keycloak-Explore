@@ -1,5 +1,5 @@
-.claude/*.local.json
 .env
 
 # Claude settings
-*.local.json
+.claude/*.local.json
+
