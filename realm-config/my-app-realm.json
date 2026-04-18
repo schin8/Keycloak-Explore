@@ -1,6 +1,7 @@
 {
   "realm": "my-app",
   "enabled": true,
+  "loginTheme": "sample-app",
   "registrationAllowed": true,
   "roles": {
     "realm": [
